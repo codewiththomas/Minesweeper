@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,8 @@ namespace Minesweeper.Models
         public List<Field> Fields { get; set; }
 
         public GameState GameState { get; set; }
+
+        public Stopwatch Stopwatch { get; set; }
 
 
 
@@ -98,6 +101,8 @@ namespace Minesweeper.Models
             }
 
             GameState = GameState.InProgress;
+
+            Stopwatch.StartNew();
         }
 
 
@@ -172,8 +177,17 @@ namespace Minesweeper.Models
             if (!coveredFields.Except(mineFields).Any())
             {
                 GameState = GameState.Won;
-                //Stopwatch.Stop();
+                Stopwatch.Stop();
             }
+        }
+
+
+
+        public void FlagField(int x, int y)
+        {
+            var flaggedField = Fields.Where(field => field.X == x && field.Y == y).First();
+
+            flaggedField.Flag();
         }
     }
 }
